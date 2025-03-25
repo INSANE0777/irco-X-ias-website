@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -32,7 +33,7 @@ export default function Home() {
     formData.append("content", content);
     images.forEach((image) => formData.append("images", image));
 
-    const res = await fetch("/api/submit", {
+    const res = await fetch("/api/cms/submit", {
       method: "POST",
       body: formData,
     });
