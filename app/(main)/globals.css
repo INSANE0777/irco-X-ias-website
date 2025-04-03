@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: 'TAN-Pearl';
+    src: url('/FONTS/tan-pearl.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Sarpanch';
+    src: url('/FONTS/Sarpanch-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  /* Add these styles to your CSS file */
+
+.hero-section {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+  
+  #globe-text-content {
+    transition: opacity 0.5s ease;
+  }
+  
+  #globe-text-content > * {
+    transition: transform 0.8s ease;
+  }
+  /* Hide scrollbar for all elements */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
