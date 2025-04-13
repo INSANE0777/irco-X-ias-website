@@ -5,10 +5,9 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import NoiseGradientBackground from '@/components/noise-gradient-background';
-import GlobeSection from '@/components/GlobeSection';
+import InfoSection from '@/components/InfoSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,10 +82,35 @@ export default function Home() {
     />
     
     {/* Main content */}
-    <div className="relative z-0">
-      <Header />
-      <Hero />
- 
+    <div className="relative">
+      {/* Hero section with globe */}
+      <div className="relative" style={{ zIndex: 1 }}>
+        <Hero />
+      </div>
+    
+      {/* Transition section */}
+      <div className="relative h-[50vh] w-full overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-b from-transparent to-black"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+        />
+      </div>
+    
+      {/* Add the InfoSection component with higher z-index to appear above globe */}
+      <div className="relative" style={{ zIndex: 50, position: 'relative', background: 'rgba(0,0,0,0.95)' }}>
+        <motion.section 
+          className="py-20"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
+          <InfoSection />
+        </motion.section>
+      </div>
     </div>
   </>
   );

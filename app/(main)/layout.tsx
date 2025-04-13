@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../../components/header";
 import PixelTrail from "../../components/PixelTrail"; // Import PixelTrail
+import MainFooter from "../../components/MainFooter"; // Import MainFooter
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,8 +55,11 @@ export default function RootLayout({
         </div>
 
         {/* Main content container */}
-        <div className="pt-16" data-scroll-container>
+        <div className="pt-16 relative min-h-screen" data-scroll-container>
           {children}
+          
+          {/* Footer added to layout */}
+          <MainFooter />
         </div>
       </body>
     </html>
