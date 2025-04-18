@@ -6,11 +6,11 @@ import fs from "fs";
 
 export const config = {
   api: {
-    bodyParser: false, // Required to let formidable parse the form-data
+    bodyParser: false, // Disable default body parser for form-data
   },
 };
 
-export async function POST(req: Request) {
+export async function POST(req: Request): Promise<Response> {
   const form = new IncomingForm({ multiples: true });
 
   return new Promise((resolve) => {
