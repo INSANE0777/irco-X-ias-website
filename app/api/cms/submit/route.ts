@@ -1,63 +1,64 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import formidable from "formidable";
-
-type ResponseData = {
-  message?: string;
-  data?: any;
-  error?: string;
-};
+import { IncomingForm, File } from "formidable";
+import fs from "fs";
 
 export const config = {
   api: {
-    bodyParser: false, // Disable the default body parser
+    bodyParser: false, // Required to let formidable parse the form-data
   },
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+export async function POST(req: Request) {
+  const form = new IncomingForm({ multiples: true });
 
-  const form = new formidable.IncomingForm();
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
+  return new Promise((resolve) => {
+    form.parse(req as any, async (err, fields, files) => {
+      if (err) {
+        return resolve(
+          NextResponse.json({ error: err.message }, { status: 500 })
+        );
+      }
 
-    const { title, content } = fields;
-    const images = files.images as formidable.File[];
+      const { title, content } = fields;
+      const images = files.images as File[] | File;
 
-    try {
-      // Upload multiple images to Supabase Storage
-      const imagePaths: string[] = [];
-      if (images && images.length > 0) {
-        for (const image of images) {
-          const fileName = `${Date.now()}-${image.name}`;
+      try {
+        const imagePaths: string[] = [];
+
+        const imageArray = Array.isArray(images) ? images : [images];
+
+        for (const image of imageArray) {
+          const filePath = image.filepath;
+          const fileData = fs.readFileSync(filePath);
+          const fileName = `${Date.now()}-${image.originalFilename}`;
+
           const { data, error } = await supabase.storage
             .from("images")
-            .upload(fileName, image.toJSON().filepath);
+            .upload(fileName, fileData);
 
           if (error) throw error;
           imagePaths.push(fileName);
         }
+
+        const { data: postData, error: dbError } = await supabase
+          .from("posts")
+          .insert([{ title, content, image_paths: imagePaths }]);
+
+        if (dbError) throw dbError;
+
+        return resolve(
+          NextResponse.json(
+            { message: "Post created successfully", data: postData },
+            { status: 200 }
+          )
+        );
+      } catch (error: any) {
+        return resolve(
+          NextResponse.json({ error: error.message }, { status: 500 })
+        );
       }
-
-      // Insert data into the SQL database
-      const { data: postData, error: dbError } = await supabase
-        .from("posts")
-        .insert([{ title, content, image_paths: imagePaths }]);
-
-      if (dbError) throw dbError;
-
-      return res
-        .status(200)
-        .json({ message: "Post created successfully", data: postData });
-    } catch (error: any) {
-      return res.status(500).json({ error: error.message });
-    }
+    });
   });
 }
