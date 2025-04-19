@@ -1,8 +1,4 @@
-/*
-	Installed from https://reactbits.dev/ts/tailwind/
-*/
-
-import { useEffect, useRef } from "react"; // Removed unused useCallback
+import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 
 const VERT = `#version 300 es
@@ -125,8 +121,11 @@ export default function Aurora(props: AuroraProps) {
     amplitude = 1.0,
     blend = 0.5,
   } = props;
+
   const propsRef = useRef<AuroraProps>(props);
-  propsRef.current = props;
+  useEffect(() => {
+    propsRef.current = props;
+  }, [props]);
 
   const ctnDom = useRef<HTMLDivElement>(null);
 
@@ -145,9 +144,8 @@ export default function Aurora(props: AuroraProps) {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = "transparent";
 
-    // Define geometry and program variables here, as they are used before assignment in resize/init
     const geometry = new Triangle(gl);
-    let program: Program | null = null; // Initialize program as null
+    let program: Program | null = null;
 
     const resize = () => {
       renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
@@ -155,26 +153,19 @@ export default function Aurora(props: AuroraProps) {
         program.uniforms.uResolution.value = [ctn.offsetWidth, ctn.offsetHeight];
       }
     };
+
     window.addEventListener("resize", resize, false);
 
-    // Define init as a regular function inside useEffect
-    const init = () => {
-      // Ensure geometry is defined before accessing attributes
-      if (geometry && geometry.attributes) {
-         // Use Record<string, any> or a more specific type if known
-         delete (geometry.attributes as Record<string, any>).uv;
-      }
-    };
-
-    // Call init after defining it
-    init();
+    // Cleanup unnecessary UV attribute if exists
+    if (geometry.attributes) {
+      delete (geometry.attributes as Record<string, any>).uv;
+    }
 
     const colorStopsArray = colorStops.map((hex) => {
       const c = new Color(hex);
       return [c.r, c.g, c.b];
     });
 
-    // Assign the program instance
     program = new Program(gl, {
       vertex: VERT,
       fragment: FRAG,
@@ -193,33 +184,32 @@ export default function Aurora(props: AuroraProps) {
     let animateId = 0;
     const update = (t: number) => {
       animateId = requestAnimationFrame(update);
+
       const { time = t * 0.01, speed = 1.0 } = propsRef.current;
+
       if (program) {
         program.uniforms.uTime.value = time * speed * 0.1;
-        program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
+        program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? amplitude;
         program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
-        const stops = propsRef.current.colorStops ?? colorStops;
-        program.uniforms.uColorStops.value = stops.map((hex: string) => {
+        program.uniforms.uColorStops.value = (propsRef.current.colorStops ?? colorStops).map((hex) => {
           const c = new Color(hex);
           return [c.r, c.g, c.b];
         });
         renderer.render({ scene: mesh });
       }
     };
-    animateId = requestAnimationFrame(update);
 
-    resize(); // Call resize after program is potentially initialized
+    animateId = requestAnimationFrame(update);
+    resize();
 
     return () => {
       cancelAnimationFrame(animateId);
       window.removeEventListener("resize", resize);
-      if (ctn && gl.canvas.parentNode === ctn) {
+      if (ctn.contains(gl.canvas)) {
         ctn.removeChild(gl.canvas);
       }
-      // Check if getExtension exists before calling loseContext
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-    // Add dependencies that might change and require effect re-run
   }, [amplitude, blend, colorStops]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
