@@ -2,7 +2,7 @@
 	Installed from https://reactbits.dev/ts/tailwind/
 */
 
-import { useEffect, useRef, useCallback } from "react"; // Import useCallback here
+import { useEffect, useRef } from "react"; // Removed unused useCallback
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 
 const VERT = `#version 300 es
@@ -161,7 +161,8 @@ export default function Aurora(props: AuroraProps) {
     const init = () => {
       // Ensure geometry is defined before accessing attributes
       if (geometry && geometry.attributes) {
-         delete (geometry.attributes as any).uv;
+         // Use Record<string, any> or a more specific type if known
+         delete (geometry.attributes as Record<string, any>).uv;
       }
     };
 

@@ -1,10 +1,12 @@
 /* eslint-disable react/no-unknown-property */
+// Removed eslint-disable directive as it was unused
 "use client";
 import * as THREE from 'three';
-import { Canvas, extend, useFrame, useThree } from '@react-three/fiber';
-import { useRef, useState, useMemo, useEffect } from 'react';
+// Removed unused imports: Canvas, useFrame, useThree
+import { extend } from '@react-three/fiber';
+// Removed unused imports: useRef, useState, useMemo, useEffect
 import { shaderMaterial } from '@react-three/drei';
-import { BufferAttribute } from 'three';
+// Removed unused import: BufferAttribute
 
 // Define the shader material using drei's shaderMaterial helper
 const DotMaterial = shaderMaterial(

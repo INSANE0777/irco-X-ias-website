@@ -48,7 +48,7 @@ export default function InfoSection() {
           <div className="md:w-1/2">
             <h2 className="text-3xl font-bold text-white mb-6 font-['Sarpanch']">Bennett University</h2>
             <p className="text-gray-300 mb-4 font-['Sarpanch']">
-              Bennett University is a premier educational institution established by the Times Group, India's largest media conglomerate. Founded with a vision to provide Ivy League quality education, the university is located in Greater Noida, near Delhi NCR.
+              Bennett University is a premier educational institution established by the Times Group, India&apos;s largest media conglomerate. Founded with a vision to provide Ivy League quality education, the university is located in Greater Noida, near Delhi NCR.
             </p>
             <p className="text-gray-300 mb-4 font-['Sarpanch']">
               The university offers undergraduate, postgraduate, and doctoral programs across various disciplines including Engineering, Management, Law, Media, and Liberal Arts. Bennett University is committed to providing a transformative educational experience that prepares students for leadership roles in a rapidly evolving global landscape.
@@ -83,10 +83,10 @@ export default function InfoSection() {
               The International Relations and Collaborations Office (IRCO) at Bennett University serves as the gateway to global opportunities for students and faculty. IRCO facilitates international partnerships, exchange programs, and collaborative research initiatives with prestigious institutions worldwide.
             </p>
             <p className="text-gray-300 mb-4 font-['Sarpanch']">
-              Through strategic alliances with universities across the globe, IRCO enables students to gain international exposure, cultural understanding, and a global perspective that is essential in today's interconnected world.
+              Through strategic alliances with universities across the globe, IRCO enables students to gain international exposure, cultural understanding, and a global perspective that is essential in today&apos;s interconnected world.
             </p>
             <p className="text-gray-300 font-['Sarpanch']">
-              IRCO's mission is to foster a globally engaged campus community and to position Bennett University as a hub for international academic collaboration and innovation.
+              IRCO&apos;s mission is to foster a globally engaged campus community and to position Bennett University as a hub for international academic collaboration and innovation.
             </p>
           </div>
           <div className="md:w-1/2 relative h-[300px] md:h-[400px] rounded-lg overflow-hidden">
@@ -122,7 +122,7 @@ export default function InfoSection() {
             <p className="text-gray-400 mb-2 font-['Sarpanch']">Director, International Relations</p>
             <div className="w-16 h-0.5 bg-blue-500 mb-6"></div>
             <p className="text-gray-300 italic text-lg mb-6 font-['Sarpanch']">
-              "At Bennett University, we believe in providing our students with a truly global education. Through our international partnerships and exchange programs, we are creating future leaders who understand the complexities of our interconnected world and are equipped to address global challenges with innovative solutions."
+              &quot;At Bennett University, we believe in providing our students with a truly global education. Through our international partnerships and exchange programs, we are creating future leaders who understand the complexities of our interconnected world and are equipped to address global challenges with innovative solutions.&quot;
             </p>
             <div className="flex space-x-2">
               <span className="text-yellow-400">★</span>
