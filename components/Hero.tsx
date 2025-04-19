@@ -350,7 +350,7 @@ const Hero = () => {
             </h2>
             <p className="text-xl text-gray-200 mb-6 font-['Sarpanch']">
               Connecting thought leaders, policymakers, and researchers across
-              continents to address the world's most pressing challenges.
+              continents to address the world&apos;s most pressing challenges.
             </p>
             <p className="text-xl text-gray-200 mb-6 font-['Sarpanch']">
               Our international network spans over 50 countries, creating a

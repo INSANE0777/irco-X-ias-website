@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { cn } from '@/app/lib/utils';
+import React from "react";
+// import Link from "next/link"; // Removed unused import
+import { motion } from "framer-motion";
+import { AuroraBackground } from "./ui/Aurora";
+import Image from "next/image";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);

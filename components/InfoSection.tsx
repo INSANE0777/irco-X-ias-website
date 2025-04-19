@@ -269,3 +269,118 @@ export default function InfoSection() {
     </div>
   );
 }
+
+// Renamed the second component from InfoSection to FeaturesSection
+export const FeaturesSection = () => {
+    const features = [
+        {
+            title: "Groundbreaking Research",
+            description:
+                "Dive into our portfolio of cutting-edge research projects spanning AI, quantum computing, and sustainable technologies. We&apos;re pushing the boundaries of what&apos;s possible.", // Escaped apostrophe
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-2",
+            thumbnail: "/thumbnails/research.jpg",
+        },
+        {
+            title: "Collaborative Environment",
+            description:
+                "IAS fosters a dynamic ecosystem where leading researchers, industry experts, and students collaborate to solve complex global challenges.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-1",
+            thumbnail: "/thumbnails/collaboration.jpg",
+        },
+        {
+            title: "Educational Programs",
+            description:
+                "Explore our advanced degree programs, workshops, and seminars designed to cultivate the next generation of innovators and thought leaders.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-1",
+            thumbnail: "/thumbnails/education.jpg",
+        },
+        {
+            title: "Industry Partnerships",
+            description:
+                "We partner with leading technology companies and organizations to translate research breakthroughs into real-world applications and impact.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-2",
+            thumbnail: "/thumbnails/partnerships.jpg",
+        },
+         {
+            title: "State-of-the-Art Facilities",
+            description:
+                "Our campus boasts world-class laboratories and research facilities equipped with the latest technology to support pioneering scientific exploration.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-2",
+            thumbnail: "/thumbnails/facilities.jpg",
+        },
+        {
+            title: "Global Impact Initiatives",
+            description:
+                "Learn about our initiatives focused on leveraging technology for social good, addressing climate change, and promoting digital inclusion worldwide.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-1",
+            thumbnail: "/thumbnails/impact.jpg",
+        },
+         {
+            title: "Faculty Excellence",
+            description:
+                "Meet our distinguished faculty members, renowned experts in their fields who are dedicated to mentorship and advancing scientific knowledge.",
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-1",
+            thumbnail: "/thumbnails/faculty.jpg",
+        },
+        {
+            title: "Innovation Hub",
+            description:
+                "Discover our incubator program that supports startups and entrepreneurs in transforming innovative ideas into successful ventures. It&apos;s a launchpad for the future.", // Escaped apostrophe
+            content: null, // Replaced empty parentheses with null
+            className: "md:col-span-2",
+            thumbnail: "/thumbnails/innovation.jpg",
+        },
+    ];
+    return (
+        <div className="relative z-20 py-20 bg-black">
+            {/* Assuming SectionTitle and BentoGrid components exist and are imported */}
+            {/* <SectionTitle
+                title="Explore the Institute of Advanced Studies"
+                subtitle="Unveiling Our Core Pillars and Initiatives"
+                description="IAS is dedicated to advancing knowledge and fostering innovation across diverse scientific disciplines. Our work is driven by a commitment to excellence, collaboration, and societal impact. We strive to create a future where technology serves humanity&apos;s greatest needs." // Escaped apostrophe
+            /> */}
+            {/* <BentoGrid className="max-w-7xl mx-auto md:auto-rows-[22rem]">
+                {features.map((feature, i) => (
+                    <BentoGridItem
+                        key={i}
+                        title={feature.title}
+                        description={feature.description}
+                        header={feature.content}
+                        className={feature.className + " border-white/[0.1]"} // Added border class
+                        icon={<IconComponent index={i} />} // Use IconComponent
+                    />
+                ))}
+            </BentoGrid> */}
+            <div className="max-w-7xl mx-auto mt-16 px-8">
+                <h3 className="text-3xl font-bold text-center text-white mb-8">What Our Community Says</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-neutral-900 p-6 rounded-lg border border-neutral-800">
+                        <p className="text-neutral-300 mb-4">
+                            &quot;Working at IAS has been transformative. The collaborative spirit and access to cutting-edge resources are unparalleled. It&apos;s truly a place where innovation thrives.&quot; {/* Escaped quotes and apostrophe */}
+                        </p>
+                        <p className="text-neutral-500 font-medium">- Dr. Evelyn Reed, Senior Researcher</p>
+                    </div>
+                    <div className="bg-neutral-900 p-6 rounded-lg border border-neutral-800">
+                        <p className="text-neutral-300 mb-4">
+                            &quot;As a student, the mentorship and opportunities I&apos;ve received at IAS have been invaluable. I feel prepared to contribute meaningfully to the field.&quot; {/* Escaped quotes and apostrophe */}
+                        </p>
+                        <p className="text-neutral-500 font-medium">- Alex Chen, PhD Candidate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Note: You might need to adjust imports/exports and component usage elsewhere
+// in your project depending on which 'InfoSection' you intended to use where.
+// Also, the SectionTitle, BentoGrid, BentoGridItem, and IconComponent seem
+// to be missing or commented out in the return statement of the renamed
+// FeaturesSection. You'll need to ensure those are correctly implemented or imported.

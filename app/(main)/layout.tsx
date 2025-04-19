@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../../components/header";
-import PixelTrail from "../../components/PixelTrail"; // Import PixelTrail
+
 import MainFooter from "../../components/MainFooter"; // Import MainFooter
 
 const geistSans = Geist({
@@ -27,27 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* Fixed PixelTrail Background */}
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        >
-          <PixelTrail
-            gridSize={50}
-            trailSize={0.1}
-            maxAge={250}
-            interpolate={5}
-            color="#ffffff"
-            gooeyFilter={{ id: "custom-goo-filter", strength: 2 }}
-          />
-        </div>
+      
 
         {/* Fixed header */}
         <div className="fixed top-0 left-0 w-full z-[9999] pointer-events-auto">

@@ -1,64 +1,67 @@
-import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
-import formidable from "formidable";
-import { IncomingForm, File } from "formidable";
-import fs from "fs";
+import { NextRequest, NextResponse } from 'next/server';
+import { promises as fs } from 'fs';
+// import formidable from 'formidable'; // Removed unused import
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { PrismaClient } from '@prisma/client';
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable default body parser for form-data
-  },
-};
+export async function POST(req: NextRequest) {
+    const prisma = new PrismaClient();
+    try {
+        const formData = await req.formData();
+        const title = formData.get('title') as string;
+        const description = formData.get('description') as string;
+        const file = formData.get('file') as File | null;
 
-export async function POST(req: Request): Promise<Response> {
-  const form = new IncomingForm({ multiples: true });
-
-  return new Promise((resolve) => {
-    form.parse(req as any, async (err, fields, files) => {
-      if (err) {
-        return resolve(
-          NextResponse.json({ error: err.message }, { status: 500 })
-        );
-      }
-
-      const { title, content } = fields;
-      const images = files.images as File[] | File;
-
-      try {
-        const imagePaths: string[] = [];
-
-        const imageArray = Array.isArray(images) ? images : [images];
-
-        for (const image of imageArray) {
-          const filePath = image.filepath;
-          const fileData = fs.readFileSync(filePath);
-          const fileName = `${Date.now()}-${image.originalFilename}`;
-
-          const { data, error } = await supabase.storage
-            .from("images")
-            .upload(fileName, fileData);
-
-          if (error) throw error;
-          imagePaths.push(fileName);
+        if (!title || !description) {
+            return NextResponse.json({ error: 'Title and description are required' }, { status: 400 });
         }
 
-        const { data: postData, error: dbError } = await supabase
-          .from("posts")
-          .insert([{ title, content, image_paths: imagePaths }]);
+        let imageUrl: string | null = null;
+        if (file) {
+            const fileExtension = path.extname(file.name);
+            const fileName = `${uuidv4()}${fileExtension}`;
+            const filePath = path.join(process.cwd(), 'public', 'uploads', fileName);
+            const fileBuffer = Buffer.from(await file.arrayBuffer());
+            await fs.writeFile(filePath, fileBuffer);
+            imageUrl = `/uploads/${fileName}`;
+        }
 
-        if (dbError) throw dbError;
+        // const data = await prisma.cmsData.create({ // Removed unused variable 'data'
+        await prisma.cmsData.create({
+            data: {
+                title,
+                description,
+                imageUrl,
+            },
+        });
 
-        return resolve(
-          NextResponse.json(
-            { message: "Post created successfully", data: postData },
-            { status: 200 }
-          )
-        );
-      } catch (error: any) {
-        return resolve(
-          NextResponse.json({ error: error.message }, { status: 500 })
-        );
-      }
-    });
-  });
+        return NextResponse.json({ message: 'Data submitted successfully' });
+    } catch (error: unknown) { // Changed 'any' to 'unknown'
+        console.error('Error submitting data:', error);
+        let errorMessage = 'Internal Server Error';
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        return NextResponse.json({ error: 'Failed to submit data', details: errorMessage }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+export async function GET() {
+    const prisma = new PrismaClient();
+    try {
+        const data = await prisma.cmsData.findMany();
+        return NextResponse.json(data);
+    } catch (error: unknown) { // Changed 'any' to 'unknown'
+        console.error('Error fetching data:', error);
+        let errorMessage = 'Internal Server Error';
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        return NextResponse.json({ error: 'Failed to fetch data', details: errorMessage }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
 }

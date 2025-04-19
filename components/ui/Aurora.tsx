@@ -2,7 +2,7 @@
 	Installed from https://reactbits.dev/ts/tailwind/
 */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react"; // Import useCallback here
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 
 const VERT = `#version 300 es
@@ -145,30 +145,35 @@ export default function Aurora(props: AuroraProps) {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = "transparent";
 
-    let program: Program | undefined;
-
-    function resize() {
-      if (!ctn) return;
-      const width = ctn.offsetWidth;
-      const height = ctn.offsetHeight;
-      renderer.setSize(width, height);
-      if (program) {
-        program.uniforms.uResolution.value = [width, height];
-      }
-    }
-    window.addEventListener("resize", resize);
-
+    // Define geometry and program variables here, as they are used before assignment in resize/init
     const geometry = new Triangle(gl);
-    if (geometry.attributes.uv) {
-      // TypeScript may require a type assertion here.
-      delete (geometry.attributes as any).uv;
-    }
+    let program: Program | null = null; // Initialize program as null
+
+    const resize = () => {
+      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+      if (program) {
+        program.uniforms.uResolution.value = [ctn.offsetWidth, ctn.offsetHeight];
+      }
+    };
+    window.addEventListener("resize", resize, false);
+
+    // Define init as a regular function inside useEffect
+    const init = () => {
+      // Ensure geometry is defined before accessing attributes
+      if (geometry && geometry.attributes) {
+         delete (geometry.attributes as any).uv;
+      }
+    };
+
+    // Call init after defining it
+    init();
 
     const colorStopsArray = colorStops.map((hex) => {
       const c = new Color(hex);
       return [c.r, c.g, c.b];
     });
 
+    // Assign the program instance
     program = new Program(gl, {
       vertex: VERT,
       fragment: FRAG,
@@ -202,7 +207,7 @@ export default function Aurora(props: AuroraProps) {
     };
     animateId = requestAnimationFrame(update);
 
-    resize();
+    resize(); // Call resize after program is potentially initialized
 
     return () => {
       cancelAnimationFrame(animateId);
@@ -210,9 +215,11 @@ export default function Aurora(props: AuroraProps) {
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas);
       }
+      // Check if getExtension exists before calling loseContext
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [amplitude]);
+    // Add dependencies that might change and require effect re-run
+  }, [amplitude, blend, colorStops]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 }
