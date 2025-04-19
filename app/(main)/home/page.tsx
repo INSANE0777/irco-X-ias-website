@@ -28,8 +28,8 @@ export default function Home() {
     <>
       {/* Fixed background canvas */}
       <NoiseGradientBackground 
-        grainOpacity={0.15} 
-        gradientDirection="top-to-bottom" 
+     
+       
         className="fixed inset-0 -z-10 h-full w-full object-cover" 
       />
     
