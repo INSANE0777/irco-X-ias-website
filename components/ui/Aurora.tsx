@@ -158,7 +158,7 @@ export default function Aurora(props: AuroraProps) {
 
     // Cleanup unnecessary UV attribute if exists
     if (geometry.attributes) {
-      delete (geometry.attributes as Record<string, any>).uv;
+      delete (geometry.attributes as Record<string, unknown>).uv;
     }
 
     const colorStopsArray = colorStops.map((hex) => {
